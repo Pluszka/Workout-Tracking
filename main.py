@@ -10,7 +10,7 @@ WEIGHT_KG = 61.5
 HEIGHT_CM = 164
 AGE = 19
 
-SHEETY_ENDPOINT = os.environ.get('SHEETY_WORKOUTS')
+SHEETY_ENDPOINT = os.environ.get('API_WORKOUT')
 NUTRI_ENDPOINT = 'https://trackapi.nutritionix.com/v2/natural/exercise'
 
 nutri_params_exercise = {
@@ -30,6 +30,10 @@ response = requests.post(url=NUTRI_ENDPOINT, json=nutri_params_exercise, headers
 response.raise_for_status()
 data = response.json()
 
+SHEET_HEADER = {
+    "Authorization": f"Bearer {os.environ.get('WORKOUTS_TOKEN')}"
+}
+
 for exercise in data['exercises']:
     params_row = {
         'workout': {
@@ -40,5 +44,5 @@ for exercise in data['exercises']:
             'calories': exercise['nf_calories'],
         }
     }
-    response = requests.post(url=SHEETY_ENDPOINT, json=params_row)
+    response = requests.post(url=SHEETY_ENDPOINT, json=params_row, headers=SHEET_HEADER)
     print(response.text)
