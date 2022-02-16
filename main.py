@@ -14,7 +14,7 @@ SHEETY_ENDPOINT = os.environ.get('SHEETY_WORKOUTS')
 NUTRI_ENDPOINT = 'https://trackapi.nutritionix.com/v2/natural/exercise'
 
 nutri_params_exercise = {
- "query": input('Which exercises have you done?(+amount of time/reps)'),
+ "query": input('Which exercises have you done?(+amount of time/reps)').lower(),
  "gender": GENDER,
  "weight_kg": WEIGHT_KG,
  "height_cm": HEIGHT_CM,
@@ -32,11 +32,13 @@ data = response.json()
 
 for exercise in data['exercises']:
     params_row = {
-        'workouts': {
-            'Date': dt.date.today(),
-            'Time': dt.datetime.now().time(),
-            'Exercise': exercise['user_input'],
-            'Duration': exercise['duration_min'],
-            'Calories' exercise['nf_calories'],
+        'workout': {
+            'date': dt.date.today().strftime("%d/%m/%Y"),
+            'time': dt.datetime.now().time().strftime("%X"),
+            'exercise': exercise['user_input'].title(),
+            'duration': exercise['duration_min'],
+            'calories': exercise['nf_calories'],
         }
     }
+    response = requests.post(url=SHEETY_ENDPOINT, json=params_row)
+    print(response.text)
