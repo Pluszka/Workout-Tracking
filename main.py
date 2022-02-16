@@ -7,11 +7,11 @@ KEY = os.environ.get('nutritionix_key')
 NUTRI_ENDPOINT = 'https://trackapi.nutritionix.com/v2/natural/exercise'
 
 nutri_params_exercise = {
- "query":"ran 3 miles",
- "gender":"female",
- "weight_kg":61.5,
- "height_cm":164,
- "age":19
+ "query": input('Which exercises have you done?(+amount of time/reps)'),
+ "gender": "female",
+ "weight_kg": 61.5,
+ "height_cm": 164,
+ "age": 19
 }
 
 header = {
@@ -21,3 +21,5 @@ header = {
 
 response = requests.post(url=NUTRI_ENDPOINT, json=nutri_params_exercise, headers=header)
 response.raise_for_status()
+data = response.json()
+print(data)
